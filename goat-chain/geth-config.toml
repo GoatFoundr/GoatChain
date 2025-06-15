@@ -1,0 +1,22 @@
+[Eth]
+NetworkId = 1337
+SyncMode = "full"
+NoPruning = true
+NoPrefetch = true
+
+[Node]
+DataDir = "~/goat-chain/data"
+HTTPHost = "0.0.0.0"
+HTTPPort = 8545
+HTTPVirtualHosts = ["*"]
+HTTPCors = ["*"]
+HTTPModules = ["eth", "net", "web3", "personal", "miner"]
+
+[Miner]
+GasPrice = "1000000000"
+GasLimit = "8000000"
+Etherbase = "0x7c0d52faab596c08f484e3478aebc6205f3f5d8c"
+
+[Eth.Miner]
+GasFloor = 8000000
+GasCeil = 8000000 
