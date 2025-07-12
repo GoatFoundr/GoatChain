@@ -10,14 +10,9 @@
     "petersburgBlock": 0,
     "istanbulBlock": 0,
     "berlinBlock": 0,
-    "londonBlock": 0,
-    "mergeNetsplitBlock": 0,
-    "terminalTotalDifficulty": 0,
-    "terminalTotalDifficultyPassed": true,
-    "shanghaiTime": 0,
-    "cancunTime": 0
+    "londonBlock": 0
   },
-  "difficulty": "0x0",
+  "difficulty": "0x400",
   "gasLimit": "0x8000000",
   "alloc": {
     "0x123463a4b065722e99115d6c222f267d9cabb524": {
