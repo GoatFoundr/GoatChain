@@ -18,19 +18,19 @@ contract GoatChainToken is ERC20, Ownable, Pausable {
     }
 
     function _transfer(address from, address to, uint256 amount) internal override whenNotPaused {
-        if (from == address(0) || to == address(0) || from == owner() || to == feeManager.platformWallet() || to == feeManager.rewardsWallet()) {
+        if (from == address(0) || to == address(0) || from == owner() || to == feeManager.platformWallet() || to == feeManager.rewardsPool()) {
             super._transfer(from, to, amount);
             return;
         }
 
-        (uint256 platformFee, uint256 rewardsFee) = feeManager.getGoatChainFees(amount);
+        (uint256 platformFee, , uint256 rewardsFee) = feeManager.calculateFees(amount, true);
         uint256 totalFees = platformFee + rewardsFee;
         uint256 sendAmount = amount - totalFees;
 
         require(amount >= totalFees, "Amount too small for fees");
 
         super._transfer(from, feeManager.platformWallet(), platformFee);
-        super._transfer(from, feeManager.rewardsWallet(), rewardsFee);
+        super._transfer(from, feeManager.rewardsPool(), rewardsFee);
         super._transfer(from, to, sendAmount);
     }
     

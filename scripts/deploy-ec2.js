@@ -28,7 +28,7 @@ async function main() {
   // Deploy FeeManager first
   console.log("\n📦 Deploying FeeManager...");
   const FeeManager = await ethers.getContractFactory("FeeManager");
-  const feeManager = await FeeManager.deploy();
+  const feeManager = await FeeManager.deploy(deployer.address, deployer.address);
   await feeManager.deployed();
   console.log("✅ FeeManager deployed to:", feeManager.address);
 
@@ -56,14 +56,7 @@ async function main() {
   await stakingContract.deployed();
   console.log("✅ Staking Contract deployed to:", stakingContract.address);
 
-  // Initialize FeeManager with contract addresses
-  console.log("\n⚙️  Initializing FeeManager...");
-  await feeManager.initialize(
-    goatChainToken.address,
-    lazerDimToken.address,
-    stakingContract.address
-  );
-  console.log("✅ FeeManager initialized with contract addresses");
+  console.log("\n✅ All contracts deployed successfully!");
 
   // Save deployment addresses
   const deploymentInfo = {
