@@ -34,7 +34,6 @@ geth \
     --ws.api "admin,db,eth,net,web3,personal,miner" \
     --ws.origins "*" \
     --mine \
-    --miner.threads 1 \
     --maxpeers 50 \
     --cache 1024 \
     --syncmode "full" \
