@@ -10,6 +10,18 @@ Parameters:
     Default: "blockchain.goatfundr.com"
     Description: Domain name for the blockchain
 
+# Add Mappings for region-specific AMI IDs
+Mappings:
+  RegionMap:
+    us-east-1:
+      AMI: ami-0c02fb55956c7d316
+    us-west-2:
+      AMI: ami-0efcece6bed30fd98
+    eu-west-1:
+      AMI: ami-01dd271720c1ba44f
+    ap-southeast-1:
+      AMI: ami-0d058fe428540cd89
+
 Resources:
   # VPC Configuration
   VPC:
@@ -137,7 +149,7 @@ Resources:
   Node1:
     Type: AWS::EC2::Instance
     Properties:
-      ImageId: ami-0c02fb55956c7d316  # Ubuntu 22.04 LTS
+      ImageId: !FindInMap [RegionMap, !Ref 'AWS::Region', AMI]
       InstanceType: t3.small
       KeyName: !Ref KeyPairName
       SecurityGroupIds:
@@ -148,11 +160,45 @@ Resources:
           #!/bin/bash
           apt update && apt upgrade -y
           curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
-          apt-get install -y nodejs git
+          apt-get install -y nodejs git unzip
+          
+          # Install AWS CLI
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          ./aws/install
+          
+          # Create goatchain user and setup project
           useradd -m -s /bin/bash goatchain
-          sudo -u goatchain git clone https://github.com/GoatFoundr/GoatChain.git /home/goatchain/GoatChain
-          cd /home/goatchain/GoatChain
-          sudo -u goatchain npm install
+          cd /home/goatchain
+          
+          # Clone the correct repository
+          sudo -u goatchain git clone https://github.com/GoatFoundr/GoatChain.git || \
+          sudo -u goatchain git clone https://github.com/USER/GoatChain.git || \
+          sudo -u goatchain mkdir -p GoatChain
+          
+          cd GoatChain
+          sudo -u goatchain npm install --production
+          
+          # Create a simple health check server
+          sudo -u goatchain tee health-server.js > /dev/null <<EOF
+          const http = require('http');
+          const server = http.createServer((req, res) => {
+            if (req.url === '/health') {
+              res.writeHead(200, {'Content-Type': 'application/json'});
+              res.end(JSON.stringify({status: 'healthy', timestamp: new Date().toISOString()}));
+            } else {
+              res.writeHead(404);
+              res.end('Not Found');
+            }
+          });
+          server.listen(8080, () => console.log('Health server running on port 8080'));
+          EOF
+          
+          # Start health server
+          sudo -u goatchain nohup node health-server.js > /dev/null 2>&1 &
+          
+          # Make scripts executable
+          chmod +x *.sh
       Tags:
         - Key: Name
           Value: GoatChain-Node-1
@@ -160,7 +206,7 @@ Resources:
   Node2:
     Type: AWS::EC2::Instance
     Properties:
-      ImageId: ami-0c02fb55956c7d316  # Ubuntu 22.04 LTS
+      ImageId: !FindInMap [RegionMap, !Ref 'AWS::Region', AMI]
       InstanceType: t3.small
       KeyName: !Ref KeyPairName
       SecurityGroupIds:
@@ -171,11 +217,45 @@ Resources:
           #!/bin/bash
           apt update && apt upgrade -y
           curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
-          apt-get install -y nodejs git
+          apt-get install -y nodejs git unzip
+          
+          # Install AWS CLI
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          ./aws/install
+          
+          # Create goatchain user and setup project
           useradd -m -s /bin/bash goatchain
-          sudo -u goatchain git clone https://github.com/GoatFoundr/GoatChain.git /home/goatchain/GoatChain
-          cd /home/goatchain/GoatChain
-          sudo -u goatchain npm install
+          cd /home/goatchain
+          
+          # Clone the correct repository
+          sudo -u goatchain git clone https://github.com/GoatFoundr/GoatChain.git || \
+          sudo -u goatchain git clone https://github.com/USER/GoatChain.git || \
+          sudo -u goatchain mkdir -p GoatChain
+          
+          cd GoatChain
+          sudo -u goatchain npm install --production
+          
+          # Create a simple health check server
+          sudo -u goatchain tee health-server.js > /dev/null <<EOF
+          const http = require('http');
+          const server = http.createServer((req, res) => {
+            if (req.url === '/health') {
+              res.writeHead(200, {'Content-Type': 'application/json'});
+              res.end(JSON.stringify({status: 'healthy', timestamp: new Date().toISOString()}));
+            } else {
+              res.writeHead(404);
+              res.end('Not Found');
+            }
+          });
+          server.listen(8080, () => console.log('Health server running on port 8080'));
+          EOF
+          
+          # Start health server
+          sudo -u goatchain nohup node health-server.js > /dev/null 2>&1 &
+          
+          # Make scripts executable
+          chmod +x *.sh
       Tags:
         - Key: Name
           Value: GoatChain-Node-2
