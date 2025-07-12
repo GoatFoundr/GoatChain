@@ -1,0 +1,14 @@
+# GoatChain Production Environment Variables
+
+# STEP 1: Use your current EC2 IP first (replace with your actual IP)
+RPC_URL=http://54.176.66.242:8545
+WS_URL=ws://54.176.66.242:8546
+
+# STEP 2: Add your frontend domain (replace with your actual domain)
+ALLOWED_ORIGINS=https://goatfundr.com,https://comingsoongoatfundr.com
+
+# STEP 3: Add your wallet mnemonic (12 words from your deployment wallet)
+MNEMONIC=your twelve word mnemonic phrase here for deployment wallet
+
+# Optional: For gas reporting
+REPORT_GAS=true 

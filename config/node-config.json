@@ -1,0 +1,36 @@
+{
+  "network": {
+    "chainId": 999191917,
+    "port": 8545,
+    "host": "0.0.0.0",
+    "rpcUrl": "${RPC_URL}",
+    "wsUrl": "${WS_URL}"
+  },
+  "mining": {
+    "auto": true,
+    "interval": 15000,
+    "gasLimit": "8000000"
+  },
+  "accounts": {
+    "mnemonic": "${MNEMONIC}",
+    "count": 10,
+    "balance": "10000000000000000000000"
+  },
+  "gas": {
+    "price": "20000000000",
+    "limit": "8000000"
+  },
+  "logging": {
+    "level": "info",
+    "file": "/var/log/goatchain/node.log"
+  },
+  "security": {
+    "cors": ["${ALLOWED_ORIGINS}"],
+    "allowUnprotectedTxs": false,
+    "maxPeers": 50,
+    "rateLimit": {
+      "windowMs": 900000,
+      "max": 100
+    }
+  }
+} 
