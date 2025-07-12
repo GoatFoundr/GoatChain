@@ -11,6 +11,7 @@
     "deploy:production": "hardhat run scripts/deploy-ec2.js --network production",
     "node": "hardhat node",
     "node:ec2": "hardhat run scripts/start-ec2-node.js",
+    "node:production": "./start-hardhat-production.sh",
     "clean": "hardhat clean",
     "verify": "hardhat verify"
   },

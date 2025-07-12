@@ -16,7 +16,16 @@ module.exports = {
       chainId: 999191917,
       gas: 8000000,
       gasPrice: 20000000000,
-      blockGasLimit: 8000000
+      blockGasLimit: 8000000,
+      mining: {
+        auto: true,
+        interval: 15000
+      },
+      accounts: {
+        mnemonic: process.env.MNEMONIC || "test test test test test test test test test test test junk",
+        count: 10,
+        accountsBalance: "10000000000000000000000"
+      }
     },
     production: {
       url: process.env.RPC_URL || "http://localhost:8545",
