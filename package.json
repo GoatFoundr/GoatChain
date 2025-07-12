@@ -9,9 +9,11 @@
     "deploy": "hardhat run scripts/deploy.js",
     "deploy:ec2": "hardhat run scripts/deploy-ec2.js",
     "deploy:production": "hardhat run scripts/deploy-ec2.js --network production",
+    "deploy:enterprise": "./deploy-enterprise.sh",
     "node": "hardhat node",
     "node:ec2": "hardhat run scripts/start-ec2-node.js",
     "node:production": "./start-hardhat-production.sh",
+    "node:enterprise": "./start-enterprise-node.sh",
     "clean": "hardhat clean",
     "verify": "hardhat verify"
   },
